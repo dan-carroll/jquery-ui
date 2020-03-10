@@ -104,8 +104,8 @@ function jqueryUrl() {
 	var version = parseUrl().jquery || DEFAULT_JQUERY_VERSION;
 	var url;
 
-	if ( version === "git" ) {
-		url = "http://code.jquery.com/jquery-" + version;
+	if ( version === "git" || version === "3.x-git" ) {
+		url = "https://code.jquery.com/jquery-" + version;
 	} else {
 		url = "../../../external/jquery-" + version + "/jquery";
 	}
@@ -118,9 +118,9 @@ function migrateUrl() {
 	var url;
 
 	if ( jqueryVersion === "git" ) {
-		url = "http://code.jquery.com/jquery-migrate-git";
+		url = "https://code.jquery.com/jquery-migrate-git";
 	} else if ( jqueryVersion[ 0 ] === "3" ) {
-		url = "../../../external/jquery-migrate-3.0.0/jquery-migrate";
+		url = "../../../external/jquery-migrate-3.1.0/jquery-migrate";
 	} else if ( jqueryVersion[ 0 ] === "1" || jqueryVersion[ 0 ] === "2" ) {
 		url = "../../../external/jquery-migrate-1.4.1/jquery-migrate";
 	} else if ( jqueryVersion === "custom" ) {
@@ -172,8 +172,11 @@ function migrateUrl() {
 		}
 	}
 
+	var jQueryVersion = parseUrl().jquery;
+
 	// Load the jQuery fixes, if necessary
-	if ( parseFloat( parseUrl().jquery ) < 3 ) {
+	if ( !jQueryVersion ||
+		( jQueryVersion.indexOf( "git" ) === -1 && parseFloat( jQueryVersion ) < 4 ) ) {
 		modules.unshift( "ui/jquery-1-7" );
 	}
 
